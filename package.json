@@ -1,6 +1,6 @@
 {
   "name": "@varnxy/time-scheduler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Time task scheduler for node",
   "main": "index.js",
   "repository": "https://github.com/varnxy/time-scheduler.git",

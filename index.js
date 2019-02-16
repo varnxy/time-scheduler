@@ -1,5 +1,6 @@
 const EventEmitter = require('events').EventEmitter
     , util = require('util')
+    , exception = require('./exception')
 
 function TimeScheduler() {
   EventEmitter.call(this)
@@ -13,19 +14,19 @@ util.inherits(TimeScheduler, EventEmitter)
 
 TimeScheduler.prototype.addSchedule = function(opt) {
   if (this.exists(opt.name)) {
-    throw new Error('Schedule ' + opt.name + ' is already exists')
+    throw new exception.DuplicatedError('Schedule ' + opt.name + ' is already exists')
   }
 
   if (!(opt.start instanceof Date)) {
-    throw new Error('Start must be a date')
+    throw new TypeError('Start must be a date')
   }
 
   if (!(opt.end instanceof Date)) {
-    throw new Error('End must be a date')
+    throw new TypeError('End must be a date')
   }
 
   if (+opt.end <= +opt.start) {
-    throw new Error('End date must be greater that start date')
+    throw new exception.InvalidDateRangeError('End date must be greater that start date')
   }
 
   this._schedules.push({
@@ -69,11 +70,11 @@ TimeScheduler.prototype.callTask = function(scheduleName, params) {
   })
 
   if (!schedule) {
-    throw new Error('Schedule ' + scheduleName + ' is not exists')
+    throw new exception.ScheduleNotFoundError('Schedule ' + scheduleName + ' is not exists')
   } else if ((schedule && !schedule.running) || (schedule && !schedule.ready)) {
-    throw new Error('Schedule ' + scheduleName + ' is not ready')
+    throw new exception.ScheduleNotReadyError('Schedule ' + scheduleName + ' is not ready')
   } else if (schedule && schedule.running && schedule.ready && typeof schedule.task !== 'function') {
-    throw new Error('Schedule ' + scheduleName + ' is not have task')
+    throw new exception.TaskUndefinedError('Schedule ' + scheduleName + ' is not have task')
   } else {
     schedule.task.apply(null, params || [])
   }

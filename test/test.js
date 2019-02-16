@@ -2,6 +2,7 @@ const TimeScheduler = require('..')
     , chai = require('chai')
     , EventEmitter = require('events').EventEmitter
     , expect = chai.expect
+    , exception = require('../exception')
 
 let scheduler = null
 
@@ -38,7 +39,7 @@ describe('Test @varnxy/time-scheduler', () => {
         end: dt2,
         ready: true
       })
-    }).to.throw()
+    }).to.throw(exception.DuplicatedError, 'Schedule Campaign 1 is already exists')
 
     setTimeout(done, 1500)
   })
@@ -55,7 +56,7 @@ describe('Test @varnxy/time-scheduler', () => {
         end: null,
         ready: true
       })
-    }).to.throw()
+    }).to.throw(TypeError)
 
     expect(function() {
       scheduler.addSchedule({
@@ -64,7 +65,7 @@ describe('Test @varnxy/time-scheduler', () => {
         end: null,
         ready: true
       })
-    }).to.throw()
+    }).to.throw(TypeError)
 
     expect(function() {
       scheduler.addSchedule({
@@ -73,7 +74,7 @@ describe('Test @varnxy/time-scheduler', () => {
         end: dt2,
         ready: true
       })
-    }).to.throw()
+    }).to.throw(exception.InvalidDateRangeError, 'End date must be greater that start date')
   })
 
   it('Call the setup task schedule after 2000ms and call task when ready', function(done) {
@@ -87,14 +88,14 @@ describe('Test @varnxy/time-scheduler', () => {
 
     expect(function() {
       scheduler.callTask('Campaign 1')
-    }).to.throw
+    }).to.throw(exception.ScheduleNotFoundError)
 
     scheduler.on('Campaign 1', resolve => {
       expect(scheduler.getRemaining()).to.equal(0)
       // Should throw an error because schedule is not ready until resolve
       expect(function() {
         scheduler.callTask('Campaign 1')
-      }).to.throw
+      }).to.throw(exception.ScheduleNotReadyError)
 
       resolve()
     })
@@ -144,7 +145,7 @@ describe('Test @varnxy/time-scheduler', () => {
     setTimeout(function() {
       expect(function() {
         scheduler.callTask('Campaign 1', ['Foo', 'Bar', 'Baz'])
-      }).to.throw()
+      }).to.throw(exception.ScheduleNotReadyError)
     }, 500)
 
     setTimeout(function() {
@@ -161,7 +162,7 @@ describe('Test @varnxy/time-scheduler', () => {
     let scheduler = new TimeScheduler()
     expect(function() {
       scheduler.callTask('Campaign 2')
-    }).to.throw()
+    }).to.throw(exception.ScheduleNotFoundError)
   })
 
   it('Throw an error if call task registered schedule without task', function(done) {

@@ -117,4 +117,14 @@ TimeScheduler.prototype.exists = function(name) {
   }).length > 0
 }
 
+TimeScheduler.prototype.isReady = function(name) {
+  let schedule = this._schedules.find(schedule => {
+    return schedule.name == name
+  })
+
+  return schedule
+          ? (schedule.running && schedule.ready)
+          : false
+}
+
 module.exports = TimeScheduler

@@ -189,4 +189,28 @@ describe('Test @varnxy/time-scheduler', () => {
       done()
     }, 3200)
   })
+
+  it('Check if schedule is ready or not', function(done) {
+    let scheduler = new TimeScheduler()
+      , dt1 = new Date(+new Date())
+      , dt2 = new Date(+dt1 + 3000)
+
+    this.timeout(4000)
+
+    scheduler.addSchedule({
+      name: 'Campaign 1',
+      start: dt1,
+      end: dt2,
+      ready: true
+    })
+
+    expect(scheduler.isReady('Campaign 1')).to.be.false
+    // Unregistered schedule will return false to
+    expect(scheduler.isReady('Campaign 2')).to.be.false
+
+    setTimeout(function() {
+      expect(scheduler.isReady('Campaign 1')).to.be.true
+      done()
+    }, 1200)
+  })
 })

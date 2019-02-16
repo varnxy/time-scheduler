@@ -1,0 +1,29 @@
+{
+  "name": "@varnxy/time-scheduler",
+  "version": "1.0.0",
+  "description": "Time task scheduler for node",
+  "main": "index.js",
+  "repository": "https://github.com/varnxy/time-scheduler.git",
+  "author": "Yusril Herlian Syah <yusrilhsyah@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "codecov": "^3.2.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^5.2.0"
+  },
+  "scripts": {
+    "test": "istanbul cover node_modules/mocha/bin/_mocha && codecov -F istanbul_mocha",
+    "test-local": "istanbul cover node_modules/mocha/bin/_mocha"
+  },
+  "keywords": [
+    "scheduler",
+    "date",
+    "time",
+    "campaign",
+    "timer",
+    "schedule",
+    "task"
+  ]
+}

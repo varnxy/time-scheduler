@@ -67,4 +67,5 @@ scheduler.removeSchedule('Campaign Product Bar')
 console.log(scheduler.exists('Campaign Product Bar'))
 // retrieve schedule where not running
 console.log(scheduler.getRemaining())
+console.log(scheduler.isReady('Campaign Product Bar'))
 ```

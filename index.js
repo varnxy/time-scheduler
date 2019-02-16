@@ -12,7 +12,7 @@ function TimeScheduler() {
 util.inherits(TimeScheduler, EventEmitter)
 
 TimeScheduler.prototype.addSchedule = function(opt) {
-  if (this._exists(opt.name)) {
+  if (this.exists(opt.name)) {
     throw new Error('Schedule ' + opt.name + ' is already exists')
   }
 
@@ -111,7 +111,7 @@ TimeScheduler.prototype._setup = function(schedule) {
   })
 }
 
-TimeScheduler.prototype._exists = function(name) {
+TimeScheduler.prototype.exists = function(name) {
   return this._schedules.filter(schedule => {
     return schedule.name == name
   }).length > 0
